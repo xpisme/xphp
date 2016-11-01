@@ -14,7 +14,7 @@ final class App
     public static function init()
     {
         session_start();
-        spl_autoload_register(array('Core\App','myAutoload'));
+        spl_autoload_register(array('Core\App', 'myAutoload'));
         require CORE.'functions.php';
         $config = C('config');
         self::$config = $config;

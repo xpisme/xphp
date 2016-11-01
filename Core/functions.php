@@ -40,14 +40,14 @@ function get_trace()
         $trace[$k] = trim(substr($v, 3));
     }
     $sqllog = sqllog();
-    $res = array_merge($trace,$sqllog);
+    $res = array_merge($trace, $sqllog);
     return $res;
 }
 
 /*
 *获得语言包的变量
 */
-function L($key,$kind='')
+function L($key, $kind='')
 {
     static $lang = array();
     if (!empty($kind)) {
@@ -86,8 +86,8 @@ function M($name='')
  */
 function _addslashes($arr)
 {
-     foreach ($arr as $key => $value) {
-         if (is_array($value)) {
+    foreach ($arr as $key => $value) {
+        if (is_array($value)) {
             _addslashes($value);
         } else {
             $tv  = trim(addslashes($value));
@@ -103,7 +103,7 @@ function _addslashes($arr)
 function C($key)
 {
     static $config;
-    if(!isset($config)) {
+    if (!isset($config)) {
         $config = new \Core\Config();
     }
     return $config->offsetGet($key);
@@ -113,7 +113,7 @@ function C($key)
  * @param $key
  * @param $value
  */
-function GC($key,$value=array(),$flag=false)
+function GC($key, $value=array(), $flag=false)
 {
     static $cache = array();
     $filename = DBCACHE.$key.'.php';
@@ -125,7 +125,7 @@ function GC($key,$value=array(),$flag=false)
         $cache[$key] = unserialize($value);
         return $cache[$key];
     }
-    file_put_contents($filename,"<?php return '".serialize($value)."';");
+    file_put_contents($filename, "<?php return '".serialize($value)."';");
 }
 
 /**
@@ -133,13 +133,13 @@ function GC($key,$value=array(),$flag=false)
  * @param $data   总数据
  * @param $list  引用传值 返回string
  */
-function getPlist($currid,$data,&$list)
+function getPlist($currid, $data, &$list)
 {
     if (empty($data)) {
         return;
     }
     if ($currid == 0) {
-        $list = substr($list,0,-1);
+        $list = substr($list, 0, -1);
         return;
     }
     foreach ($data as $curr) {
@@ -181,22 +181,26 @@ function catetree($cates, $pid=0, $flag=true)
             if ($level == 1) {
                 $cate['pre'] = '&nbsp;&nbsp;';
                 $num = count($tree);
-                if($num > 0)  $tree[$num-1]['pre'] = str_replace('├','└',$tree[$num-1]['pre']);
-            } elseif( ($cha = ($level - $cates[$frontkey]['level'])) == 0) {
-                $cate['pre'] =  str_repeat("&nbsp;",($level-1)*3).'├─';
+                if ($num > 0) {
+                    $tree[$num-1]['pre'] = str_replace('├', '└', $tree[$num-1]['pre']);
+                }
+            } elseif (($cha = ($level - $cates[$frontkey]['level'])) == 0) {
+                $cate['pre'] =  str_repeat("&nbsp;", ($level-1)*3).'├─';
                 if (count($tree) == (count($cates) -1)) {
-                    $cate['pre'] =  str_repeat("&nbsp;",($level-1)*3).'└─';
+                    $cate['pre'] =  str_repeat("&nbsp;", ($level-1)*3).'└─';
                 }
             } else {
-                $cate['pre'] =  str_repeat("&nbsp;",($level-1)*3).'├─';
+                $cate['pre'] =  str_repeat("&nbsp;", ($level-1)*3).'├─';
                 $num = count($tree);
-                if($cha<0) $tree[$num-1]['pre'] = str_replace('├','└',$tree[$num-1]['pre']);
+                if ($cha<0) {
+                    $tree[$num-1]['pre'] = str_replace('├', '└', $tree[$num-1]['pre']);
+                }
             }
             $frontkey = $key;
             $cate['url'] = md5($cate['cid']).'bxve'.$cate['cid'];
             $tree[] = $cate;
             if (!empty($cate['childlist'])) {
-                catetree($cates,$cate['cid'],false);
+                catetree($cates, $cate['cid'], false);
             }
         }
     }
@@ -208,12 +212,12 @@ function get_all_child($arr, $id = 0, &$childs)
     if (!is_array($arr)) {
         return false;
     }
-    foreach($arr as $k => $v) {
+    foreach ($arr as $k => $v) {
         if ($v['pid'] == $id) {
             $childs[] = $v['cid'];
             if ($v['childlist'] != '') { // 有子节点
-                $array = explode(',',$v['childlist']);
-                foreach($array as $tv) {
+                $array = explode(',', $v['childlist']);
+                foreach ($array as $tv) {
                     $childs[] = $tv;
                     get_all_child($arr, $tv, $childs);
                 }
